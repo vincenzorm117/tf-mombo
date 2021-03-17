@@ -18,23 +18,23 @@ variable "aliases" {
 
 
 variable "hostname" {
-  type = string
+  type        = string
   description = "Hostname for site"
 }
 
 variable "bucketName" {
-  type = string
+  type        = string
   description = "Name for s3 bucket"
 }
 
 
 variable "environment" {
-  type = string
+  type        = string
   description = "Name of environment"
 }
 
 variable "project" {
-  type = string
+  type        = string
   description = "Name of project"
 }
 
@@ -48,23 +48,23 @@ variable "lambda_edges" {
 }
 
 variable "web_acl_id" {
-  type = string
+  type        = string
   description = "WAF Web ACL ID to attach to the CloudFront distribution, optional"
-  default = ""
+  default     = ""
 }
 
 
 variable "aws_access_key" {
-  type = string
+  type        = string
   description = "AWS programmatic access key"
 }
 
 variable "aws_secret_key" {
-  type = string
+  type        = string
   description = "AWS programmatic secret key"
 }
 
 variable "aws_region" {
-  type = string
+  type        = string
   description = "AWS region"
 }
