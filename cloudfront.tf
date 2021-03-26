@@ -1,5 +1,4 @@
 resource "aws_cloudfront_distribution" "mombo-deploy" {
-  count = 1
 
   is_ipv6_enabled = true
 
