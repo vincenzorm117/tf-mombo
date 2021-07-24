@@ -68,3 +68,8 @@ variable "aws_region" {
   type        = string
   description = "AWS region"
 }
+
+variable "s3_lambda_artifacts" {
+  type        = string
+  description = "Name for S3 bucket containing API gateway lambda artifacts."
+}
