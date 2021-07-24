@@ -36,3 +36,4 @@ terraform.rc
 .terraform.lock.hcl
 
 plans/*
+.DS_Store
