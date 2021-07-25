@@ -11,9 +11,9 @@ data "aws_route53_zone" "main" {
 resource "aws_route53_record" "cloudfront" {
   for_each = local.static_sites
 
-  zone_id  = data.aws_route53_zone.main[local.static_site_domains_to_root_domain[each.value.hostname]].zone_id
-  name     = each.value.hostname
-  type     = "A"
+  zone_id = data.aws_route53_zone.main[local.static_site_domains_to_root_domain[each.value.hostname]].zone_id
+  name    = each.value.hostname
+  type    = "A"
 
   alias {
     name                   = aws_cloudfront_distribution.site[each.value.hostname].domain_name
