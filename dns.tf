@@ -8,14 +8,16 @@ data "aws_route53_zone" "main" {
 
 
 
-# resource "aws_route53_record" "mombo-cloudfront-route53" {
-#   zone_id = data.aws_route53_zone.main.zone_id
-#   name    = var.hostname
-#   type    = "A"
+resource "aws_route53_record" "cloudfront" {
+  for_each = local.static_sites
 
-#   alias {
-#     name                   = aws_cloudfront_distribution.mombo-deploy.domain_name
-#     zone_id                = aws_cloudfront_distribution.mombo-deploy.hosted_zone_id
-#     evaluate_target_health = false
-#   }
-# }
+  zone_id  = data.aws_route53_zone.main[local.static_site_domains_to_root_domain[each.value.hostname]].zone_id
+  name     = each.value.hostname
+  type     = "A"
+
+  alias {
+    name                   = aws_cloudfront_distribution.site[each.value.hostname].domain_name
+    zone_id                = aws_cloudfront_distribution.site[each.value.hostname].hosted_zone_id
+    evaluate_target_health = false
+  }
+}
