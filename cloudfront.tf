@@ -1,7 +1,7 @@
 
 resource "aws_cloudfront_origin_access_identity" "site" {
   for_each = local.static_sites
-  comment = "Cloudfront OAI for ${each.value.hostname}"
+  comment  = "Cloudfront OAI for ${each.value.hostname}"
 }
 
 resource "aws_cloudfront_distribution" "site" {
@@ -45,8 +45,8 @@ resource "aws_cloudfront_distribution" "site" {
 
     viewer_protocol_policy = "redirect-to-https"
     min_ttl                = 0
-    default_ttl            = 300
-    max_ttl                = 1200
+    default_ttl            = 86400
+    max_ttl                = 31536000
 
     # lambda_function_association {
     #   event_type = "viewer-request" #viewer-request, origin-request, viewer-response, origin-response
