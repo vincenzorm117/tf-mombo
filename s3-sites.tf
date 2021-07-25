@@ -3,8 +3,8 @@
 
 resource "aws_s3_bucket" "site" {
   for_each = local.static_sites
-  bucket = "${replace(each.value.hostname, ".", "-")}--site"
-  acl    = "private"
+  bucket   = "${replace(each.value.hostname, ".", "-")}--site"
+  acl      = "private"
 
 
   website {
