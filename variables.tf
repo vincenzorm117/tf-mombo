@@ -73,3 +73,23 @@ variable "s3_lambda_artifacts" {
   type        = string
   description = "Name for S3 bucket containing API gateway lambda artifacts."
 }
+
+variable "static_sites" {
+  type = list(object({
+    hostname = string
+  }))
+
+  description = "List of static sites. The following are provisioned: S3 bucket, Cloudfront distribution, Lambda Edge function, ACM entry."
+}
+
+variable "apis" {
+  type = list(object({
+    hostname = string
+    endpoints = list(object({
+      name   = string
+      method = string
+    }))
+  }))
+
+  description = "This is the list of APIs for which an API gateway is setup along with lambda functions for each endpoint and an API Gateway custom DNS name."
+}
