@@ -37,3 +37,4 @@ terraform.rc
 
 plans/*
 .DS_Store
+.vscode
