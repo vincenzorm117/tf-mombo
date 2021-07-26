@@ -48,11 +48,11 @@ resource "aws_cloudfront_distribution" "site" {
     default_ttl            = 86400
     max_ttl                = 31536000
 
-    # lambda_function_association {
-    #   event_type = "viewer-request" #viewer-request, origin-request, viewer-response, origin-response
-    #   lambda_arn = 
-    #   include_body = true
-    # }
+    lambda_function_association {
+      event_type   = "viewer-request" #viewer-request, origin-request, viewer-response, origin-response
+      lambda_arn   = aws_lambda_function.edge.arn
+      include_body = true
+    }
   }
 
   restrictions {
