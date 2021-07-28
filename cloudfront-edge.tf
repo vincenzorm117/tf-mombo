@@ -7,17 +7,15 @@
 resource "aws_lambda_function" "edge" {
   function_name = "cloudfront-edge"
   role          = aws_iam_role.edge.arn
-  handler       = "main"
+  handler       = "index.handler"
 
   # s3_bucket = aws_s3_bucket.invalidator-artifacts
   # s3_key    = "latest.zip"
   filename = "latest.zip"
 
-  runtime = "go1.x"
-
-  # depends_on = [
-  #   aws_s3_bucket.invalidator-artifacts
-  # ]
+  # runtime = "go1.x"
+  runtime = "nodejs14.x"
+  publish = true
 }
 
 
@@ -64,9 +62,7 @@ data "aws_iam_policy_document" "edge-logging" {
       "logs:PutLogEvents"
     ]
     effect = "Allow"
-    resources = [
-      "arn:%s:logs:*::log-group:/aws/lambda/*:*:*"
-    ]
+    resources = ["*"]
   }
 
 }

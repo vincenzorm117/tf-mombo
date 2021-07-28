@@ -49,8 +49,8 @@ resource "aws_cloudfront_distribution" "site" {
     max_ttl                = 31536000
 
     lambda_function_association {
-      event_type   = "viewer-request" #viewer-request, origin-request, viewer-response, origin-response
-      lambda_arn   = aws_lambda_function.edge.arn
+      event_type   = "origin-request" #viewer-request, origin-request, viewer-response, origin-response
+      lambda_arn   = aws_lambda_function.edge.qualified_arn
       include_body = true
     }
   }
