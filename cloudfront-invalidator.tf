@@ -171,3 +171,54 @@ resource "aws_lambda_permission" "apigw" {
 #   certificate_arn = aws_acm_certificate_validation.cert.certificate_arn
 #   domain_name     = "api.vincenzo.cloud"
 # }
+
+
+
+
+resource "aws_lambda_function" "invalidator-v2" {
+  function_name = "cloudfront-invalidator-v2"
+  role          = aws_iam_role.invalidator.arn
+  handler       = "index.handler"
+
+  filename = "latest.zip"
+
+  runtime = "nodejs14.x"
+  publish = true
+
+  environment {
+    variables = {
+      # Cloudfront ID => S3 bucket name
+      for s in local.static_sites : aws_cloudfront_distribution.site[s.hostname].id => aws_s3_bucket.site[s.hostname].bucket
+    }
+  }
+
+}
+
+resource "aws_s3_bucket_notification" "invalidator-v2" {
+  for_each = local.static_sites
+  bucket   = aws_s3_bucket.site[each.key].id
+
+  lambda_function {
+    # Fire Lambda only if the index.html file is updated
+    lambda_function_arn = aws_lambda_function.invalidator-v2.arn
+    events = [
+      "s3:ObjectCreated:*",
+      "s3:ObjectRemoved:*",
+    ]
+    filter_prefix = "index.html"
+  }
+}
+
+resource "aws_lambda_permission" "allow_bucket_lambda_alias" {
+  for_each      = local.static_sites
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.invalidator-v2.arn
+  principal     = "s3.amazonaws.com"
+  source_arn    = aws_s3_bucket.site[each.key].arn
+}
+
+
+resource "aws_iam_role_policy_attachment" "lambda-policy-attach-v2" {
+  role       = aws_iam_role.invalidator.name
+  policy_arn = aws_iam_policy.lambda-permissions-policy.arn
+}
