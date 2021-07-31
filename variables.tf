@@ -17,16 +17,6 @@ variable "aliases" {
 }
 
 
-variable "hostname" {
-  type        = string
-  description = "Hostname for site"
-}
-
-variable "bucketName" {
-  type        = string
-  description = "Name for s3 bucket"
-}
-
 
 variable "environment" {
   type        = string
@@ -77,6 +67,7 @@ variable "s3_lambda_artifacts" {
 variable "static_sites" {
   type = list(object({
     hostname = string
+    aliases  = list(string)
   }))
 
   description = "List of static sites. The following are provisioned: S3 bucket, Cloudfront distribution, Lambda Edge function, ACM entry."

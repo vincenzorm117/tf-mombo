@@ -61,7 +61,7 @@ data "aws_iam_policy_document" "edge-logging" {
       "logs:CreateLogStream",
       "logs:PutLogEvents"
     ]
-    effect = "Allow"
+    effect    = "Allow"
     resources = ["*"]
   }
 
