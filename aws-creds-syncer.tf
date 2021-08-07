@@ -2,19 +2,19 @@
 
 resource "aws_iam_user" "syncer" {
   for_each = local.static_sites
-  name = each.key
-  path = "/syncer/"
+  name     = each.key
+  path     = "/syncer/"
 }
 
 resource "aws_iam_access_key" "syncer" {
   for_each = local.static_sites
-  user = aws_iam_user.syncer[each.key].name
+  user     = aws_iam_user.syncer[each.key].name
 }
 
 resource "aws_iam_user_policy" "syncer" {
   for_each = local.static_sites
-  name = "syncer-${each.key}"
-  user = aws_iam_user.syncer[each.key].name
+  name     = "syncer-${each.key}"
+  user     = aws_iam_user.syncer[each.key].name
 
   policy = data.aws_iam_policy_document.syncer[each.key].json
 }
