@@ -37,6 +37,8 @@ data "aws_iam_policy_document" "syncer" {
     resources = [
       aws_s3_bucket.site[each.key].arn,
       "${aws_s3_bucket.site[each.key].arn}/*",
+      aws_s3_bucket.multi[each.key].arn,
+      "${aws_s3_bucket.multi[each.key].arn}/*",
     ]
   }
 

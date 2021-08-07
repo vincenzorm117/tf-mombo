@@ -1,7 +1,6 @@
 locals {
   domains = toset([for domain in setunion(
     toset([for s in var.static_sites : s.hostname]),
-    toset([for s in var.apis : s.hostname]),
   ) : regex("[^.]+.[^.]+$", domain)])
 
   # Maps all full domain sites like: 
