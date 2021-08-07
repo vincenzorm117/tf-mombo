@@ -38,3 +38,5 @@ terraform.rc
 plans/*
 .DS_Store
 .vscode
+lambdas/*.zip
+lambdas/*/node_modules
