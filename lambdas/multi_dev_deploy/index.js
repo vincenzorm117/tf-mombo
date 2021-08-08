@@ -119,20 +119,37 @@ const ExtractConfig = (event) => {
   return null;
 };
 
+const InvalidateCloudfront = (config) => {
+  const params = {
+    DistributionId: config.cloudFrontDistributionId,
+    InvalidationBatch: {
+      CallerReference: Date.now().toString(),
+      Paths: {
+        Quantity: 1,
+        Items: [`/*`],
+      },
+    },
+  };
+
+  return cloudfront.createInvalidation(params).promise();
+};
+
+const WaitForInvalidation = (config, Invalidation) => {
+  const params = {
+    DistributionId: config.cloudFrontDistributionId,
+    Id: Invalidation.Id,
+  };
+  return cloudfront.waitFor("invalidationCompleted", params).promise();
+};
+
 exports.handler = async (event) => {
-  // const handler = async (event) => {
-  console.log(JSON.stringify(process.env, null, 2));
-  console.log(JSON.stringify(event, null, 2));
-  // const domainHostedZoneId = "Z064249530YU5YTUNKYZ3"; // TODO: make environment variable
-  // const DistributionId = "E39ODSRCYCAYKH"; // TODO: make environment variable
+  let res;
   const config = ExtractConfig(event);
   console.log(23, JSON.stringify(config, null, 2));
-  // const subdomain = `${branchName}.vincenzo.cloud`; // TODO: calculate from s3 bucket, branch and environment variables
-  let res;
 
   try {
     res = await UpdateRoute53(config);
-    console.log(res);
+    // console.log(res);
   } catch (error) {
     // If error has "it already exists" it means the A record already exists
     //   thus we dont need to stop the program here.
@@ -145,10 +162,20 @@ exports.handler = async (event) => {
 
   try {
     res = await UpdateCloudfront(config);
-    console.log(res);
+    // console.log(res);
+  } catch (error) {
+    console.error(error);
+  }
+
+  try {
+    res = await InvalidateCloudfront(config);
+    console.log("InvalidateCloudfront", JSON.stringify(res, null, 2));
+
+    const before = new Date();
+    res = await WaitForInvalidation(config, res.Invalidation);
+    console.log("WaitForInvalidation1", new Date() - before);
+    console.log("WaitForInvalidation2", JSON.stringify(res, null, 2));
   } catch (error) {
     console.error(error);
   }
 };
-
-// handler();

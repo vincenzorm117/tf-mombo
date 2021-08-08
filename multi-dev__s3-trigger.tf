@@ -56,6 +56,8 @@ data "aws_iam_policy_document" "multi-dev-deploy" {
       "cloudfront:GetDistributionConfig",
       "cloudfront:CreateInvalidation",
       "cloudfront:UpdateDistribution",
+      "cloudfront:CreateInvalidation",
+      "cloudfront:GetInvalidation",
     ]
     effect = "Allow"
     resources = [
@@ -109,6 +111,8 @@ resource "aws_lambda_function" "multi-dev-deploy" {
 
   runtime = "nodejs14.x"
   publish = true
+
+  timeout = 300
 
   environment {
     variables = merge(
