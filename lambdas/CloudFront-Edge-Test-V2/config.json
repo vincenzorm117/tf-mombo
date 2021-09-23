@@ -1,0 +1,8 @@
+{
+    "redirects": [
+        {
+            "matchPath": "\/contact\/",
+            "location": "/about/"
+        }
+    ]
+}
