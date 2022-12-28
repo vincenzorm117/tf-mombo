@@ -1,4 +1,11 @@
 
+# TODO: problem for another day
+# resource "aws_route53_zone" "primary" {
+#   for_each     = {
+#     for s in local.domains : s => s
+#   }
+#   name = each.key
+# }
 
 data "aws_route53_zone" "main" {
   for_each     = local.domains
